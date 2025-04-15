@@ -4,6 +4,8 @@ package user;
 
 option go_package = "./user";
 
+// goctl rpc protoc ./apps/user/rpc/user.proto --go_out=./apps/user/rpc --go-grpc_out=./apps/user/rpc --zrpc_out=./apps/user/rpc
+
 message UserEntity {
   string id = 1;
   string avatar = 2;
@@ -32,10 +34,10 @@ message LoginResp {
 }
 
 message RegisterReq {
-  string avatar = 1;
+  string phone = 1;
   string nickname = 2;
-  string phone = 3;
-  int32  status = 4;
+  string password = 3;
+  string avatar = 4;
   int32  sex = 5;
 }
 

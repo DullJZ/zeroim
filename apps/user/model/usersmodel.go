@@ -1,6 +1,8 @@
 package model
 
 import (
+	"context"
+
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
@@ -12,6 +14,7 @@ type (
 	// and implement the added methods in customUsersModel.
 	UsersModel interface {
 		usersModel
+		FindOneByPhone(ctx context.Context, phone string) (*Users, error)
 	}
 
 	customUsersModel struct {
