@@ -2,17 +2,17 @@ Name: user.rpc
 ListenOn: 0.0.0.0:8080
 Etcd:
   Hosts:
-  - 127.0.0.1:2379
+  - etcd:2379
   Key: user.rpc
 
 Mysql:
-  Datasource: root:zeroim@tcp(127.0.0.1:3306)/zeroim?charset=utf8mb4
+  Datasource: root:zeroim@tcp(mysql:3306)/zeroim?charset=utf8mb4
 
 Cache:
-  - Host: 127.0.0.1:6379
+  - Host: redis:6379
     Type: node
-    Password: zeroim
+    Pass: zeroim
 
 Jwt:
-  Secret: zeroim
-  Expire: 86400
+  AccessExpire: 8640000
+  AccessSecret: zeroim

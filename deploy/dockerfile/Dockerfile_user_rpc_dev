@@ -4,16 +4,16 @@ FROM golang:1.23-alpine AS builder
 WORKDIR /build
 
 # 复制go.mod和go.sum文件
-COPY apps/go.mod apps/go.sum ./
+COPY go.mod go.sum ./
 
 # 下载依赖
 RUN go env -w  GOPROXY=https://goproxy.cn,direct && go mod download
 
-# 复制源代码
-COPY apps/ ./
+# 复制整个项目
+COPY . .
 
 # 构建应用程序
-RUN CGO_ENABLED=0 GOOS=linux go build -o /build/user_rpc ./user/rpc/user.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o /build/user_rpc ./apps/user/rpc
 
 # 使用alpine作为最终镜像
 FROM alpine:latest

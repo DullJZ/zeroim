@@ -1,10 +1,10 @@
 #!/bin/bash
 
-repo_addr=registry.cn-shenzhen.aliyuncs.com/zeroim/user-rpc-test
+repo_addr=registry.cn-shenzhen.aliyuncs.com/zeroim/test-user-rpc
 
 tag="latest"
 
-container_name="zeroim-user-rpc-test"
+container_name="zeroim-test-user-rpc"
 
 docker stop ${container_name}
 docker rm ${container_name}
