@@ -15,6 +15,8 @@ type (
 	UsersModel interface {
 		usersModel
 		FindOneByPhone(ctx context.Context, phone string) (*Users, error)
+		ListByName(ctx context.Context, name string) ([]*Users, error)
+		ListByIds(ctx context.Context, ids []string) ([]*Users, error)
 	}
 
 	customUsersModel struct {

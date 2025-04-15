@@ -2,7 +2,9 @@ package logic
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/DullJZ/zeroim/apps/user/model"
 	"github.com/DullJZ/zeroim/apps/user/rpc/internal/svc"
 	"github.com/DullJZ/zeroim/apps/user/rpc/user"
 
@@ -24,7 +26,22 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(in *user.GetUserInfoReq) (*user.GetUserInfoResp, error) {
-	// todo: add your logic here and delete this line
+	u, err := l.svcCtx.UserModel.FindOne(l.ctx, in.Id)
+	if err != nil {
+		if err == model.ErrNotFound {
+			return nil, fmt.Errorf("未找到该用户ID")
+		}
+		return nil, err
+	}
 
-	return &user.GetUserInfoResp{}, nil
+	return &user.GetUserInfoResp{
+		User: &user.UserEntity{
+			Id:       u.Id,
+			Avatar:   u.Avatar,
+			Nickname: u.Nickname,
+			Phone:    u.Phone,
+			Status:   int32(u.Status.Int64),
+			Sex:      int32(u.Sex.Int64),
+		},
+	}, nil
 }
