@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"strings"
 
@@ -30,6 +31,23 @@ func (m *defaultUsersModel) FindOneByPhone(ctx context.Context, phone string) (*
 	default:
 		return nil, err
 	}
+}
+
+func (m *customUsersModel) Insert(ctx context.Context, data *Users) (sql.Result, error) {
+	usersPhoneKey := fmt.Sprintf("%s%v", cacheUsersPhonePrefix, data.Phone)
+
+	result, err := m.defaultUsersModel.Insert(ctx, data)
+	if err != nil {
+		return nil, err
+	}
+
+	// 手动删除Phone相关缓存，防止重复注册
+	err = m.defaultUsersModel.CachedConn.DelCache(usersPhoneKey)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
 }
 
 func (m *defaultUsersModel) ListByName(ctx context.Context, name string) ([]*Users, error) {
