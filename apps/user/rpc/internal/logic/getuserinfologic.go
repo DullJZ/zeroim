@@ -2,14 +2,17 @@ package logic
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/DullJZ/zeroim/apps/user/model"
 	"github.com/DullJZ/zeroim/apps/user/rpc/internal/svc"
 	"github.com/DullJZ/zeroim/apps/user/rpc/user"
+	"github.com/DullJZ/zeroim/pkg/xerr"
+	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
+
+var ErrFindUserById = errors.New("未找到该用户ID")
 
 type GetUserInfoLogic struct {
 	ctx    context.Context
@@ -29,9 +32,9 @@ func (l *GetUserInfoLogic) GetUserInfo(in *user.GetUserInfoReq) (*user.GetUserIn
 	u, err := l.svcCtx.UserModel.FindOne(l.ctx, in.Id)
 	if err != nil {
 		if err == model.ErrNotFound {
-			return nil, fmt.Errorf("未找到该用户ID")
+			return nil, errors.WithStack(ErrFindUserById)
 		}
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewDBErr(), "get user info err %v", err)
 	}
 
 	return &user.GetUserInfoResp{

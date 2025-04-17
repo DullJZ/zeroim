@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/DullJZ/zeroim/apps/user/model"
@@ -10,8 +9,15 @@ import (
 	"github.com/DullJZ/zeroim/apps/user/rpc/user"
 	"github.com/DullJZ/zeroim/pkg/ctxdata"
 	"github.com/DullJZ/zeroim/pkg/encrypt"
+	"github.com/DullJZ/zeroim/pkg/xerr"
+	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
+)
+
+var (
+	ErrPhoneNotRegister = xerr.New(xerr.SERVER_COMMON_ERROR, "手机号未注册")
+	ErrUserPwdError     = xerr.New(xerr.SERVER_COMMON_ERROR, "密码不正确")
 )
 
 type LoginLogic struct {
@@ -33,13 +39,13 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 	u, err := l.svcCtx.UserModel.FindOneByPhone(l.ctx, in.Phone)
 	if err != nil {
 		if err == model.ErrNotFound {
-			return nil, fmt.Errorf("用户手机号未注册")
+			return nil, errors.WithStack(ErrPhoneNotRegister)
 		}
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewDBErr(), "find user by phone err %v , req %v", err, in.Phone)
 	}
 	// 校验密码
 	if !encrypt.ValidatePasswordHash(in.Password, u.Password.String) {
-		return nil, fmt.Errorf("密码错误")
+		return nil, errors.WithStack(ErrUserPwdError)
 	}
 	// 生成token
 	token, err := ctxdata.GetJwtToken(
@@ -49,7 +55,7 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 		u.Id,
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewDBErr(), "get jwt token err %v", err)
 	}
 
 	return &user.LoginResp{

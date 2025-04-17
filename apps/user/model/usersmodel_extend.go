@@ -44,7 +44,7 @@ func (m *customUsersModel) Insert(ctx context.Context, data *Users) (sql.Result,
 	// 手动删除Phone相关缓存，防止重复注册
 	err = m.defaultUsersModel.CachedConn.DelCache(usersPhoneKey)
 	if err != nil {
-		return result, err
+		return result, nil
 	}
 
 	return result, nil

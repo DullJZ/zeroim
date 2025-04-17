@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"time"
 
 	"github.com/DullJZ/zeroim/apps/user/model"
@@ -12,7 +11,7 @@ import (
 	"github.com/DullJZ/zeroim/pkg/ctxdata"
 	"github.com/DullJZ/zeroim/pkg/encrypt"
 	"github.com/DullJZ/zeroim/pkg/wuid"
-
+	"github.com/DullJZ/zeroim/pkg/xerr"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -21,6 +20,11 @@ type RegisterLogic struct {
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
+
+var (
+	ErrPhoneAlreadyRegistered = xerr.New(xerr.SERVER_COMMON_ERROR, "手机号已注册")
+	ErrPasswordTooShort       = xerr.New(xerr.SERVER_COMMON_ERROR, "密码小于六位")
+)
 
 func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterLogic {
 	return &RegisterLogic{
@@ -37,7 +41,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 		return nil, err
 	}
 	if userEntity != nil {
-		return nil, fmt.Errorf("用户手机号已注册")
+		return nil, ErrPhoneAlreadyRegistered
 	}
 
 	userEntity = &model.Users{
@@ -50,7 +54,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 
 	// 2. 检查密码位数
 	if len(in.Password) < 6 {
-		return nil, fmt.Errorf("密码小于六位")
+		return nil, ErrPasswordTooShort
 	}
 
 	genPassword, err := encrypt.GenPasswordHash([]byte(in.Password))
