@@ -1,0 +1,39 @@
+syntax = "v1"
+
+info (
+	title: "用户服务api路由"
+)
+
+// goctl api go -api apps/user/api/user.api -dir apps/user/api -style gozero
+import (
+	"domain.api"
+)
+
+// --------------user api v1--------------
+// 不需要登录的接口
+@server (
+	prefix: "v1/user"
+	group:  "user"
+)
+service user {
+	@doc "用户注册"
+	@handler register
+	post /register (RegisterReq) returns (RegisterResp)
+
+	@doc "用户登录"
+	@handler login
+	post /login (LoginReq) returns (LoginResp)
+}
+
+// 需要登录的接口
+@server (
+	prefix: "v1/user"
+	group:  "user"
+	jwt:    JwtAuth
+)
+service user {
+	@doc "获取用户信息"
+	@handler detail
+	get /user (UserInfoReq) returns (UserInfoResp)
+}
+
