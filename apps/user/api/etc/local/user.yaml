@@ -9,5 +9,5 @@ UserRpc:
     Key: user.rpc
 
 JwtAuth:
-  AccessSecret: zeroim
+  AccessSecret: zeroim_jwt
   AccessExpire: 8640000

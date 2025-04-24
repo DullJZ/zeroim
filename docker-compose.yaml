@@ -59,6 +59,21 @@ services:
     networks:
       - zeroim-network
 
+  user-api:
+    image: registry.cn-shenzhen.aliyuncs.com/zeroim/test-user-api:latest
+    container_name: zeroim-test-user-api
+    ports:
+      - "8888:8888"
+    environment:
+      - TZ=Asia/Shanghai
+    restart: always
+    volumes:
+      - ./apps/user/api/etc/dev/user.yaml:/app/etc/user.yaml
+    networks:
+      - zeroim-network
+    depends_on:
+      - user-rpc
+
 networks:
   zeroim-network:
     driver: bridge
