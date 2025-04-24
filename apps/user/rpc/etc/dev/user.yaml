@@ -15,4 +15,4 @@ Cache:
 
 Jwt:
   AccessExpire: 8640000
-  AccessSecret: zeroim
+  AccessSecret: zeroim_jwt
