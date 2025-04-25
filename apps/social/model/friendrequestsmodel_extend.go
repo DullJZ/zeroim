@@ -23,9 +23,9 @@ func (m *customFriendRequestsModel) FindByReqUidAndUserId(ctx context.Context, r
 	}
 }
 
-func (m *customFriendRequestsModel) Trans(ctx context.Context, fn func(session sqlx.Session) error) error {
+func (m *customFriendRequestsModel) Trans(ctx context.Context, fn func(ctx context.Context, session sqlx.Session) error) error {
 	return m.TransactCtx(ctx, func(ctx context.Context, session sqlx.Session) error {
-		return fn(session)
+		return fn(ctx, session)
 	})
 }
 

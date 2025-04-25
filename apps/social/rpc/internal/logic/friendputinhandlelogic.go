@@ -48,7 +48,7 @@ func (l *FriendPutInHandleLogic) FriendPutInHandle(in *social.FriendPutInHandleR
 	friendReq.HandleResult.Int64 = int64(in.HandleResult)
 
 	// 修改申请结果
-	err = l.svcCtx.FriendRequestsModel.Trans(l.ctx, func(session sqlx.Session) error {
+	err = l.svcCtx.FriendRequestsModel.Trans(l.ctx, func(ctx context.Context, session sqlx.Session) error {
 		if err := l.svcCtx.FriendRequestsModel.Update(l.ctx, friendReq); err != nil {
 			return errors.Wrapf(xerr.NewDBErr(), "update friend request err %v req %v", err, friendReq)
 		}
@@ -71,6 +71,9 @@ func (l *FriendPutInHandleLogic) FriendPutInHandle(in *social.FriendPutInHandleR
 		}
 		return nil
 	})
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewDBErr(), "update friend request err %v req %v", err, in)
+	}
 
 	return &social.FriendPutInHandleResp{}, nil
 }
