@@ -5,6 +5,8 @@ import (
 
 	"github.com/DullJZ/zeroim/apps/social/rpc/internal/svc"
 	"github.com/DullJZ/zeroim/apps/social/rpc/social"
+	"github.com/DullJZ/zeroim/pkg/xerr"
+	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +26,24 @@ func NewFriendListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Friend
 }
 
 func (l *FriendListLogic) FriendList(in *social.FriendListReq) (*social.FriendListResp, error) {
-	// todo: add your logic here and delete this line
+	// 获取好友列表
+	friends, err := l.svcCtx.FriendsModel.ListByUserid(l.ctx, in.UserId)
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewDBErr(), "find friend list err %v req %v", err, in)
+	}
 
-	return &social.FriendListResp{}, nil
+	var resp []*social.Friend
+	for _, friend := range friends {
+		resp = append(resp, &social.Friend{
+			Id:        int32(friend.Id),
+			UserId:    friend.UserId,
+			Remark:    friend.Remark.String,
+			AddSource: int32(friend.AddSource.Int64),
+			FriendUid: friend.FriendUid,
+		})
+	}
+
+	return &social.FriendListResp{
+		List: resp,
+	}, nil
 }

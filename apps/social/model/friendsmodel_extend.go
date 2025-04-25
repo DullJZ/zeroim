@@ -43,3 +43,13 @@ func (m *customFriendsModel) Inserts(ctx context.Context, session sqlx.Session, 
 	}
 	return session.ExecCtx(ctx, sql.String(), args...)
 }
+
+func (m *customFriendsModel) ListByUserid(ctx context.Context, userId string) ([]*Friends, error) {
+	query := fmt.Sprintf("select %s from %s where `user_id` = ?", friendsRows, m.table)
+	var resp []*Friends
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
