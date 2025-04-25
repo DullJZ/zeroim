@@ -11,4 +11,4 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- goctl model mysql ddl -src="./deploy/sql/user.sql" -dir="./apps/user/model"
+-- goctl model mysql ddl -src="./deploy/sql/user.sql" -dir="./apps/user/model" -c

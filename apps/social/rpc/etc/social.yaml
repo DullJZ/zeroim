@@ -1,0 +1,14 @@
+Name: social.rpc
+ListenOn: 0.0.0.0:8080
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: social.rpc
+
+Mysql:
+  Datasource: root:zeroim@tcp(mysql:3306)/zeroim?charset=utf8mb4
+
+Cache:
+  - Host: redis:6379
+    Type: node
+    Pass: zeroim
