@@ -1,6 +1,9 @@
 package model
 
 import (
+	"context"
+	"database/sql"
+
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
@@ -12,6 +15,8 @@ type (
 	// and implement the added methods in customFriendsModel.
 	FriendsModel interface {
 		friendsModel
+		FindByUidAndFid(ctx context.Context, uid, fid string) (*Friends, error)
+		Inserts(ctx context.Context, session sqlx.Session, data ...*Friends) (sql.Result, error)
 	}
 
 	customFriendsModel struct {

@@ -1,6 +1,8 @@
 package model
 
 import (
+	"context"
+
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
@@ -12,6 +14,7 @@ type (
 	// and implement the added methods in customFriendRequestsModel.
 	FriendRequestsModel interface {
 		friendRequestsModel
+		FindByReqUidAndUserId(ctx context.Context, rid, uid string) (*FriendRequests, error)
 	}
 
 	customFriendRequestsModel struct {
