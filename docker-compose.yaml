@@ -74,6 +74,19 @@ services:
     depends_on:
       - user-rpc
 
+  social-rpc:
+    image: registry.cn-shenzhen.aliyuncs.com/zeroim/test-social-rpc:latest
+    container_name: zeroim-test-social-rpc
+    ports:
+      - "8081:8080"
+    environment:
+      - TZ=Asia/Shanghai
+    restart: always
+    volumes:
+      - ./apps/social/rpc/etc/dev/social.yaml:/app/etc/social.yaml
+    networks:
+      - zeroim-network
+
 networks:
   zeroim-network:
     driver: bridge

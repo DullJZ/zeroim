@@ -3,3 +3,7 @@ user-rpc-dev:
 
 user-api-dev:
 	@make -f deploy/make/user-api.mk release-test
+
+social-rpc-dev:
+	@make -f deploy/make/social-rpc.mk release-test
+
