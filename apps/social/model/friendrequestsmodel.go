@@ -14,6 +14,7 @@ type (
 	// and implement the added methods in customFriendRequestsModel.
 	FriendRequestsModel interface {
 		friendRequestsModel
+		FindByUserId(ctx context.Context, uid string) ([]*FriendRequests, error)
 		FindByReqUidAndUserId(ctx context.Context, rid, uid string) (*FriendRequests, error)
 		Trans(ctx context.Context, fn func(ctx context.Context, session sqlx.Session) error) error
 		Update(ctx context.Context, data *FriendRequests) error

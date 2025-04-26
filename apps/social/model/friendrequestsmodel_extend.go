@@ -9,6 +9,16 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
+func (m *customFriendRequestsModel) FindByUserId(ctx context.Context, uid string) ([]*FriendRequests, error) {
+	query := fmt.Sprintf("select %s from %s where `user_id` = ?", friendRequestsRows, m.table)
+	var resp []*FriendRequests
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uid)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func (m *customFriendRequestsModel) FindByReqUidAndUserId(ctx context.Context, rid, uid string) (*FriendRequests, error) {
 	query := fmt.Sprintf("select %s from %s where `req_uid` = ? and `user_id` = ?", friendRequestsRows, m.table)
 	var resp FriendRequests

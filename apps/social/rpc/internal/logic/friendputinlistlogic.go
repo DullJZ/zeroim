@@ -24,7 +24,23 @@ func NewFriendPutInListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 }
 
 func (l *FriendPutInListLogic) FriendPutInList(in *social.FriendPutInListReq) (*social.FriendPutInListResp, error) {
-	// todo: add your logic here and delete this line
+	friendReqs, err := l.svcCtx.FriendRequestsModel.FindByUserId(l.ctx, in.UserId)
+	if err != nil {
+		return nil, err
+	}
+	var list []*social.FriendRequest
+	for _, friendReq := range friendReqs {
+		list = append(list, &social.FriendRequest{
+			Id:         int32(friendReq.Id),
+			UserId:     friendReq.UserId,
+			ReqUid:     friendReq.ReqUid,
+			ReqMsg:     friendReq.ReqMsg.String,
+			ReqTime:    friendReq.ReqTime.Unix(),
+			HandleResult: int32(friendReq.HandleResult.Int64),
+		})
+	}
 
-	return &social.FriendPutInListResp{}, nil
+	return &social.FriendPutInListResp{
+		List: list,
+	}, nil
 }
