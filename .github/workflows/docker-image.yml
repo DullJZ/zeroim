@@ -1,11 +1,6 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-  # 添加手动触发支持
   workflow_dispatch:
     inputs:
       version_tag:
