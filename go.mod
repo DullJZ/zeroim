@@ -1,8 +1,7 @@
 module github.com/DullJZ/zeroim
 
 go 1.22.0
-
-toolchain go1.22.1
+toolchain go1.24.1
 
 require (
 	github.com/edwingeng/wuid v1.0.0
@@ -11,7 +10,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/zeromicro/go-zero v1.8.2
 	github.com/zeromicro/x v0.0.0-20240408115609-8224c482b07e
-	golang.org/x/crypto v0.33.0
+	golang.org/x/crypto v0.36.0
 	google.golang.org/grpc v1.71.1
 	google.golang.org/protobuf v1.36.6
 )
@@ -79,11 +78,11 @@ require (
 	go.uber.org/automaxprocs v1.6.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
-	golang.org/x/net v0.35.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/oauth2 v0.25.0 // indirect
-	golang.org/x/sys v0.30.0 // indirect
-	golang.org/x/term v0.29.0 // indirect
-	golang.org/x/text v0.22.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/term v0.30.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	golang.org/x/time v0.10.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250106144421-5f5ef82da422 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250115164207-1a7da9e5054f // indirect
