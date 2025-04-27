@@ -87,6 +87,21 @@ services:
     networks:
       - zeroim-network
 
+  social-api:
+    image: registry.cn-shenzhen.aliyuncs.com/zeroim/test-social-api:latest
+    container_name: zeroim-test-social-api
+    ports:
+      - "8881:8881"
+    environment:
+      - TZ=Asia/Shanghai
+    restart: always
+    volumes:
+      - ./apps/social/api/etc/dev/social.yaml:/app/etc/social.yaml
+    networks:
+      - zeroim-network
+    depends_on:
+      - social-rpc
+
 networks:
   zeroim-network:
     driver: bridge

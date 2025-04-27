@@ -7,3 +7,6 @@ user-api-dev:
 social-rpc-dev:
 	@make -f deploy/make/social-rpc.mk release-test
 
+social-api-dev:
+	@make -f deploy/make/social-api.mk release-test
+
