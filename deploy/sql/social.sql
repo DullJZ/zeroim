@@ -12,8 +12,8 @@ CREATE TABLE `friends` (
 
 CREATE TABLE `friend_requests` (
    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-   `user_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
-   `req_uid` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
+   `user_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL COMMENT '收到申请的用户ID' ,
+   `req_uid` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL COMMENT '发起申请的用户ID' ,
    `req_msg` varchar(255) DEFAULT NULL,
    `req_time` timestamp  NOT NULL,
    `handle_result`  tinyint COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE `group_members` (
 
 CREATE TABLE `group_requests` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `req_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
+  `req_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL COMMENT '申请者的用户ID',
   `group_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
   `req_msg` varchar(255) DEFAULT NULL,
   `req_time` timestamp NULL DEFAULT NULL,

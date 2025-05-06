@@ -2,9 +2,13 @@ package logic
 
 import (
 	"context"
+	"database/sql"
+	"time"
 
+	"github.com/DullJZ/zeroim/apps/social/model"
 	"github.com/DullJZ/zeroim/apps/social/rpc/internal/svc"
 	"github.com/DullJZ/zeroim/apps/social/rpc/social"
+	"github.com/DullJZ/zeroim/pkg/constants"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +28,44 @@ func NewGroupPutInLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GroupP
 }
 
 func (l *GroupPutInLogic) GroupPutIn(in *social.GroupPutInReq) (*social.GroupPutInResp, error) {
-	// todo: add your logic here and delete this line
+	// 检查是否已经在群内
+	_, err := l.svcCtx.GroupMembersModel.FindByGroupIdAndUserId(l.ctx, in.GroupId, in.ReqId)
+	if err == nil || err != model.ErrNotFound {
+		return nil, err
+	}
+	// 检查是否已经申请过并且未处理
+	_, err = l.svcCtx.GroupRequestsModel.FindByUserIdAndGroupIdAndState(l.ctx, in.ReqId, in.GroupId, int(constants.GroupRequestStatusWait))
+	if err == nil || err != model.ErrNotFound {
+		return nil, err
+	}
+	// 创建申请记录
+	_, err = l.svcCtx.GroupRequestsModel.Insert(l.ctx, &model.GroupRequests{
+		ReqId:   in.ReqId,
+		GroupId: in.GroupId,
+		ReqMsg: sql.NullString{
+			String: in.ReqMsg,
+			Valid:  true,
+		},
+		ReqTime: sql.NullTime{
+			Time:  time.Unix(in.ReqTime, 0),
+			Valid: true,
+		},
+		JoinSource: sql.NullInt64{
+			Int64: int64(in.JoinSource),
+			Valid: true,
+		},
+		InviterUserId: sql.NullString{
+			String: in.InviterUid,
+			Valid:  true,
+		},
+		HandleResult: sql.NullInt64{
+			Int64: int64(constants.NoHandlerResult),
+			Valid: true,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
 
 	return &social.GroupPutInResp{}, nil
 }

@@ -24,7 +24,21 @@ func NewGroupListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GroupLi
 }
 
 func (l *GroupListLogic) GroupList(in *social.GroupListReq) (*social.GroupListResp, error) {
-	// todo: add your logic here and delete this line
-
-	return &social.GroupListResp{}, nil
+	groups, err := l.svcCtx.GroupsModel.FindByUserId(l.ctx, in.UserId)
+	if err != nil {
+		return nil, err
+	}
+	var list []*social.Group
+	for _, group := range groups {
+		list = append(list, &social.Group{
+			Id: group.Id,
+			Name: group.Name,
+			Icon: group.Icon,
+			Status: int32(group.Status.Int64),
+			CreatorUid: group.CreatorUid,
+		})
+	}
+	return &social.GroupListResp{
+		List: list,
+	}, nil
 }

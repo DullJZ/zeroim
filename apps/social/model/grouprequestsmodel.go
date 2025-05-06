@@ -1,6 +1,8 @@
 package model
 
 import (
+	"context"
+
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
@@ -12,6 +14,10 @@ type (
 	// and implement the added methods in customGroupRequestsModel.
 	GroupRequestsModel interface {
 		groupRequestsModel
+
+		FindByUserId(ctx context.Context, uid string) ([]*GroupRequests, error)
+		FindByGroupId(ctx context.Context, groupId string) ([]*GroupRequests, error)
+		FindByUserIdAndGroupIdAndState(ctx context.Context, uid string, groupId string, state int) ([]*GroupRequests, error)
 	}
 
 	customGroupRequestsModel struct {

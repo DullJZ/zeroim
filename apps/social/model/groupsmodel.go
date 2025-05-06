@@ -1,6 +1,8 @@
 package model
 
 import (
+	"context"
+
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
@@ -12,6 +14,9 @@ type (
 	// and implement the added methods in customGroupsModel.
 	GroupsModel interface {
 		groupsModel
+
+		FindByUserId(ctx context.Context, uid string) ([]*Groups, error)
+		Trans(ctx context.Context, fn func(ctx context.Context, session sqlx.Session) error) error
 	}
 
 	customGroupsModel struct {
