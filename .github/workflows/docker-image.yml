@@ -42,10 +42,10 @@ jobs:
     # 修改Dockerfile不使用代理
     - name: Modify Dockerfile
       run: |
-        sed -i 's/https:\/\/goproxy.cn,direct/direct/g' ./deploy/dockerfile/Dockerfile_user_api_dev
-        sed -i 's/https:\/\/goproxy.cn,direct/direct/g' ./deploy/dockerfile/Dockerfile_user_rpc_dev
-        sed -i 's/https:\/\/goproxy.cn,direct/direct/g' ./deploy/dockerfile/Dockerfile_social_rpc_dev
-        sed -i 's/https:\/\/goproxy.cn,direct/direct/g' ./deploy/dockerfile/Dockerfile_social_api_dev
+        sed -i 's/https:\/\/goproxy.cn,direct/https:\/\/proxy.golang.org,direct/g' ./deploy/dockerfile/Dockerfile_user_api_dev
+        sed -i 's/https:\/\/goproxy.cn,direct/https:\/\/proxy.golang.org,direct/g' ./deploy/dockerfile/Dockerfile_user_rpc_dev
+        sed -i 's/https:\/\/goproxy.cn,direct/https:\/\/proxy.golang.org,direct/g' ./deploy/dockerfile/Dockerfile_social_rpc_dev
+        sed -i 's/https:\/\/goproxy.cn,direct/https:\/\/proxy.golang.org,direct/g' ./deploy/dockerfile/Dockerfile_social_api_dev
 
     # 使用 buildx 构建并推送多架构镜像
     - name: Build user-api and push
