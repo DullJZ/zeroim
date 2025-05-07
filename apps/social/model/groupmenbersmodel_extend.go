@@ -18,7 +18,7 @@ func (m *customGroupMembersModel) FindByGroupId(ctx context.Context, groupId str
 func (m *customGroupMembersModel) FindByGroupIdAndUserId(ctx context.Context, groupId, userId string) (*GroupMembers, error) {
 	query := fmt.Sprintf("select %s from %s where `group_id` = ? and `user_id` = ?", groupMembersRows, m.table)
 	var resp GroupMembers
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, groupId, userId)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, groupId, userId)
 	switch err {
 	case nil:
 		return &resp, nil

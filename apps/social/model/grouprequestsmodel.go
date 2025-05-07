@@ -17,7 +17,7 @@ type (
 
 		FindByUserId(ctx context.Context, uid string) ([]*GroupRequests, error)
 		FindByGroupId(ctx context.Context, groupId string) ([]*GroupRequests, error)
-		FindByUserIdAndGroupIdAndState(ctx context.Context, uid string, groupId string, state int) ([]*GroupRequests, error)
+		FindByUserIdAndGroupIdAndState(ctx context.Context, uid string, groupId string, state int) (*GroupRequests, error)
 	}
 
 	customGroupRequestsModel struct {

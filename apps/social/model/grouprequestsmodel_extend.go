@@ -27,13 +27,13 @@ func (m *customGroupRequestsModel) FindByGroupId(ctx context.Context, groupId st
 	return resp, nil
 }
 
-func (m *customGroupRequestsModel) FindByUserIdAndGroupIdAndState(ctx context.Context, groupId, userId string, state int) ([]*GroupRequests, error) {
-	query := fmt.Sprintf("select %s from %s where `group_id` = ? and `user_id` = ? and `handle_result` = %d ", groupRequestsRows, m.table, state)
-	var groupReqs []*GroupRequests
-	err := m.QueryRowsNoCacheCtx(ctx, &groupReqs, query, groupId, userId)
+func (m *customGroupRequestsModel) FindByUserIdAndGroupIdAndState(ctx context.Context, groupId, userId string, state int) (*GroupRequests, error) {
+	query := fmt.Sprintf("select %s from %s where `group_id` = ? and `req_id` = ? and `handle_result` = %d ", groupRequestsRows, m.table, state)
+	var groupReq GroupRequests
+	err := m.QueryRowNoCacheCtx(ctx, &groupReq, query, groupId, userId)
 	switch err {
 	case nil:
-		return groupReqs, nil
+		return &groupReq, nil
 	case sqlc.ErrNotFound:
 		return nil, ErrNotFound
 	default:
