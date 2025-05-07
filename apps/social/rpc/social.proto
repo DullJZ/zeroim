@@ -39,11 +39,11 @@ message GroupMember {
     int32  id = 1;
     string groupId = 2;
     string userId = 3;
-    int32  roleLevel = 6;
-    int64  joinTime = 7;
-    int32  joinSource = 8;
-    string inviterUid = 9;
-    string operatorUid = 10;
+    int32  roleLevel = 4;
+    int64  joinTime = 5;
+    int32  joinSource = 6;
+    string inviterUid = 7;
+    string operatorUid = 8;
 }
 
 message GroupRequest {
@@ -59,10 +59,10 @@ message GroupRequest {
 }
 
 message FriendPutInReq {
-    string userId = 2;
-    string reqUid = 3;
-    string reqMsg = 4;
-    int64  reqTime = 5;
+    string userId = 1;
+    string reqUid = 2;
+    string reqMsg = 3;
+    int64  reqTime = 4;
 }
 
 message FriendPutInResp {}
@@ -92,21 +92,23 @@ message FriendListResp {
 }
 
 message GroupCreateReq {
-    string name = 2;
-    string icon = 3;
-    int32  status = 4;
-    string creator_uid = 5;
+    string name = 1;
+    string icon = 2;
+    int32  status = 3;
+    string creator_uid = 4;
 }
 
-message GroupCreateResp {}
+message GroupCreateResp {
+    string groupId = 1;
+}
 
 message GroupPutInReq {
-    string groupId = 2;
-    string reqId = 3;
-    string reqMsg = 4;
-    int64  reqTime = 5;
-    int32  joinSource = 6;
-    string inviterUid = 7;
+    string groupId = 1;
+    string reqId = 2;
+    string reqMsg = 3;
+    int64  reqTime = 4;
+    int32  joinSource = 5;
+    string inviterUid = 6;
 }
 
 message GroupPutInResp {}
@@ -124,11 +126,13 @@ message GroupPutInHandleReq {
     string groupId = 2;
     string handleUid = 3;
     int32  handleResult = 4; // 处理结果
-    string username = 6;
-    string userAvatarUrl = 7;
+    string username = 5;
+    string userAvatarUrl = 6;
 }
 
-message GroupPutInHandleResp {}
+message GroupPutInHandleResp {
+    string groupId = 1;
+}
 
 message GroupListReq {
     string userId = 1;
@@ -143,7 +147,7 @@ message GroupUsersReq {
 }
 
 message GroupUsersResp {
-    repeated GroupMember list = 1;
+    repeated GroupMember List = 1;
 }
 
 // svc
