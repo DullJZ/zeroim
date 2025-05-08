@@ -5,6 +5,8 @@ import (
 
 	"github.com/DullJZ/zeroim/apps/social/api/internal/svc"
 	"github.com/DullJZ/zeroim/apps/social/api/internal/types"
+	"github.com/DullJZ/zeroim/apps/social/rpc/social"
+	"github.com/DullJZ/zeroim/pkg/ctxdata"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,7 +27,26 @@ func NewFriendPutInListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 }
 
 func (l *FriendPutInListLogic) FriendPutInList(req *types.FriendPutInListReq) (resp *types.FriendPutInListResp, err error) {
-	// todo: add your logic here and delete this line
+	uid := ctxdata.GetUid(l.ctx)
+	list, err := l.svcCtx.SocialRpc.FriendPutInList(l.ctx, &social.FriendPutInListReq{
+		UserId: uid,
+	})
+	if err != nil {
+		return nil, err
+	}
+	respList := make([]*types.FriendRequests, 0, len(list.List))
+	for _, item := range list.List {
+		respList = append(respList, &types.FriendRequests{
+			Id:           int64(item.Id),
+			UserId:       item.UserId,
+			ReqUid:       item.ReqUid,
+			ReqMsg:       item.ReqMsg,
+			ReqTime:      item.ReqTime,
+			HandleResult: int(item.HandleResult),
+		})
+	}
 
-	return
+	return &types.FriendPutInListResp{
+		List: respList,
+	}, nil
 }

@@ -5,6 +5,8 @@ import (
 
 	"github.com/DullJZ/zeroim/apps/social/api/internal/svc"
 	"github.com/DullJZ/zeroim/apps/social/api/internal/types"
+	"github.com/DullJZ/zeroim/apps/social/rpc/social"
+	"github.com/DullJZ/zeroim/pkg/ctxdata"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,7 +27,12 @@ func NewFriendPutInLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Frien
 }
 
 func (l *FriendPutInLogic) FriendPutIn(req *types.FriendPutInReq) (resp *types.FriendPutInResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	uid := ctxdata.GetUid(l.ctx)
+	_, err = l.svcCtx.SocialRpc.FriendPutIn(l.ctx, &social.FriendPutInReq{
+		UserId:  req.UserId,
+		ReqUid:  uid,
+		ReqMsg:  req.ReqMsg,
+		ReqTime: req.ReqTime,
+	})
+	return &types.FriendPutInResp{}, err
 }
