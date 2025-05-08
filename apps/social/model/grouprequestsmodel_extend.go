@@ -5,7 +5,14 @@ import (
 	"fmt"
 
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
+
+func (m *customGroupRequestsModel) Trans(ctx context.Context, fn func(ctx context.Context, session sqlx.Session) error) error {
+	return m.TransactCtx(ctx, func(ctx context.Context, session sqlx.Session) error {
+		return fn(ctx, session)
+	})
+}
 
 func (m *customGroupRequestsModel) FindByUserId(ctx context.Context, uid string) ([]*GroupRequests, error) {
 	query := fmt.Sprintf("select %s from %s where `user_id` = ?", groupRequestsRows, m.table)

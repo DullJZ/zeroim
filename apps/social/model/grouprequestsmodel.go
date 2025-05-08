@@ -15,6 +15,7 @@ type (
 	GroupRequestsModel interface {
 		groupRequestsModel
 
+		Trans(ctx context.Context, fn func(ctx context.Context, session sqlx.Session) error) error
 		FindByUserId(ctx context.Context, uid string) ([]*GroupRequests, error)
 		FindByGroupId(ctx context.Context, groupId string) ([]*GroupRequests, error)
 		FindByUserIdAndGroupIdAndState(ctx context.Context, uid string, groupId string, state int) (*GroupRequests, error)
