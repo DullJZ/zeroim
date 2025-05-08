@@ -30,12 +30,12 @@ func NewGroupPutInLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GroupP
 func (l *GroupPutInLogic) GroupPutIn(in *social.GroupPutInReq) (*social.GroupPutInResp, error) {
 	// 检查是否已经在群内
 	_, err := l.svcCtx.GroupMembersModel.FindByGroupIdAndUserId(l.ctx, in.GroupId, in.ReqId)
-	if err == nil || err != model.ErrNotFound {
+	if err != nil && err != model.ErrNotFound {
 		return nil, err
 	}
 	// 检查是否已经申请过并且未处理
 	_, err = l.svcCtx.GroupRequestsModel.FindByUserIdAndGroupIdAndState(l.ctx, in.ReqId, in.GroupId, int(constants.GroupRequestStatusWait))
-	if err == nil || err != model.ErrNotFound {
+	if err != nil && err != model.ErrNotFound {
 		return nil, err
 	}
 	// 创建申请记录
