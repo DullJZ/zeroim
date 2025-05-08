@@ -9,6 +9,8 @@ import (
 	"github.com/DullJZ/zeroim/apps/social/rpc/internal/svc"
 	"github.com/DullJZ/zeroim/apps/social/rpc/social"
 	"github.com/DullJZ/zeroim/pkg/constants"
+	"github.com/DullJZ/zeroim/pkg/xerr"
+	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -31,12 +33,12 @@ func (l *GroupPutInLogic) GroupPutIn(in *social.GroupPutInReq) (*social.GroupPut
 	// 检查是否已经在群内
 	_, err := l.svcCtx.GroupMembersModel.FindByGroupIdAndUserId(l.ctx, in.GroupId, in.ReqId)
 	if err != nil && err != model.ErrNotFound {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewDBErr(), "find group member err %v req %v", err, in)
 	}
 	// 检查是否已经申请过并且未处理
 	_, err = l.svcCtx.GroupRequestsModel.FindByUserIdAndGroupIdAndState(l.ctx, in.ReqId, in.GroupId, int(constants.GroupRequestStatusWait))
 	if err != nil && err != model.ErrNotFound {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewDBErr(), "find group request err %v req %v", err, in)
 	}
 	// 创建申请记录
 	_, err = l.svcCtx.GroupRequestsModel.Insert(l.ctx, &model.GroupRequests{
@@ -64,7 +66,7 @@ func (l *GroupPutInLogic) GroupPutIn(in *social.GroupPutInReq) (*social.GroupPut
 		},
 	})
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewDBErr(), "insert group request err %v req %v", err, in)
 	}
 
 	return &social.GroupPutInResp{}, nil

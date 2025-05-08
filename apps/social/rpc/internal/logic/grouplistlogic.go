@@ -5,6 +5,8 @@ import (
 
 	"github.com/DullJZ/zeroim/apps/social/rpc/internal/svc"
 	"github.com/DullJZ/zeroim/apps/social/rpc/social"
+	"github.com/DullJZ/zeroim/pkg/xerr"
+	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,7 +28,7 @@ func NewGroupListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GroupLi
 func (l *GroupListLogic) GroupList(in *social.GroupListReq) (*social.GroupListResp, error) {
 	groups, err := l.svcCtx.GroupsModel.FindByUserId(l.ctx, in.UserId)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewDBErr(), "find group err %v req %v", err, in)
 	}
 	var list []*social.Group
 	for _, group := range groups {

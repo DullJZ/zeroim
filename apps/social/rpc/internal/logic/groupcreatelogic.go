@@ -9,7 +9,9 @@ import (
 	"github.com/DullJZ/zeroim/apps/social/rpc/internal/svc"
 	"github.com/DullJZ/zeroim/apps/social/rpc/social"
 	"github.com/DullJZ/zeroim/pkg/constants"
+	"github.com/DullJZ/zeroim/pkg/xerr"
 	"github.com/DullJZ/zeroim/pkg/wuid"
+	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -63,7 +65,7 @@ func (l *GroupCreateLogic) GroupCreate(in *social.GroupCreateReq) (*social.Group
 	})
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewDBErr(), "create group err %v req %v", err, in)
 	}
 
 	return &social.GroupCreateResp{
